@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Tic Tac Toe</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; }
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+        .cell { width: 100px; height: 100px; border: 1px solid #000; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .hidden { display: none; }
+        .shop { margin-top: 20px; }
+        /* Additional styles for the game UI */
+    </style>
+</head>
+<body>
+    <h1>Ultimate Tic Tac Toe</h1>
+    <div class="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+    </div>
+    <div class="shop">
+        <h2>Shop</h2>
+        <button onclick="purchaseItem()">Buy Token</button>
+        <p id="coins">Coins: 0</p>
+    </div>
+    <script>
+        let playerTurn = 'X';
+        let board = Array(9).fill(null);
+        let coins = 0;
+
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', () => makeMove(cell));
+        });
+
+        function makeMove(cell) {
+            const index = cell.getAttribute('data-index');
+            if (!board[index]) {
+                board[index] = playerTurn;
+                cell.textContent = playerTurn;
+                checkWin();
+                playerTurn = playerTurn === 'X' ? 'O' : 'X'; // Switch turns
+            }
+        }
+
+        function checkWin() {
+            // Check win logic here
+        }
+
+        function purchaseItem() {
+            coins += 1; // Increment coins
+            document.getElementById('coins').textContent = 'Coins: ' + coins;
+        }
+
+        // Add AI gameplay, shop system, coin economy implementation
+    </script>
+</body>
+</html>
