@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +41,18 @@
             touch-action: manipulation; 
         }
 
+        /* --- CANVAS BACKGROUND LAYER --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -10;
+            pointer-events: none;
+            display: none;
+        }
+
         /* --- GLOBAL ANIMATED WALLPAPER CLASSES --- */
         .bg-anim-flow { background-size: 200% 200% !important; animation: fullBodyAnimate 10s ease infinite alternate !important; }
         .bg-wallpaper-stripes { background-size: 80px 80px !important; animation: scrollStripes 3s linear infinite !important; }
@@ -49,11 +62,54 @@
         .bg-wallpaper-plasma { background-size: 400% 400% !important; animation: fullBodyAnimate 5s ease infinite alternate !important; }
         .bg-wallpaper-glitch { background-size: 40px 40px !important; animation: scrollGrid 1.5s linear infinite !important; }
         .bg-wallpaper-fire { background-size: 200% 200% !important; animation: fullBodyAnimate 3s ease-in-out infinite alternate !important; }
+        .bg-wallpaper-aurora { background-size: 200% 200% !important; animation: fullBodyAnimate 15s ease infinite alternate !important; }
+        .bg-wallpaper-quantum { background-size: 50px 50px !important; animation: scrollGrid 2s linear infinite !important; }
+        .bg-wallpaper-neonpulse { background-size: 300% 300% !important; animation: fullBodyAnimate 4s ease-in-out infinite alternate !important; }
+        .bg-wallpaper-planets {
+            background-color: #030510 !important;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(243, 156, 18, 0.9) 0%, transparent 12%),
+                radial-gradient(circle at 85% 75%, rgba(142, 68, 173, 0.9) 0%, transparent 15%),
+                radial-gradient(circle at 60% 10%, rgba(41, 128, 185, 0.8) 0%, transparent 8%),
+                radial-gradient(1.5px 1.5px at 10px 20px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2.5px 2.5px at 50px 70px, #dddddd, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 90px 40px, #ffffff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 120px 110px, rgba(255,255,255,0.8), rgba(0,0,0,0)) !important;
+            background-size: 200% 200%, 200% 200%, 200% 200%, 150px 150px, 200px 200px, 120px 120px, 180px 180px !important;
+            animation: spaceDrift 25s ease-in-out infinite alternate !important;
+        }
 
         @keyframes fullBodyAnimate { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes scrollStripes { 0% { background-position: 0 0; } 100% { background-position: 80px 80px; } }
         @keyframes scrollGrid { 0% { background-position: 0 0; } 100% { background-position: 40px 40px; } }
         @keyframes scrollSpeed { 0% { background-position: 0 0; } 100% { background-position: 0 150px; } }
+        @keyframes spaceDrift {
+            0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0 0, 0 0, 0 0, 0 0; }
+            100% { background-position: 100% 100%, 0% 0%, 10% 90%, 150px 150px, -200px 200px, 120px -120px, -180px -180px; }
+        }
+
+        /* --- X AND O DRAWING & TEXT ANIMATIONS --- */
+        .player-symbol { display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+        
+        .draw-x-path1 { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawStroke 0.15s forwards ease-out; }
+        .draw-x-path2 { stroke-dasharray: 100; stroke-dashoffset: 100; animation: drawStroke 0.15s forwards ease-out 0.15s; }
+        .draw-o-path { stroke-dasharray: 220; stroke-dashoffset: 220; animation: drawStroke 0.3s forwards ease-out; }
+        
+        @keyframes drawStroke { to { stroke-dashoffset: 0; } }
+        @keyframes drawWinLine { to { stroke-dashoffset: 0; } }
+
+        @keyframes animPulse { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        .anim-pulse { animation: animPulse 1s ease-in-out infinite; }
+        @keyframes animSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .anim-spin { animation: animSpin 3s linear infinite; }
+        @keyframes animBounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .anim-bounce { animation: animBounce 0.8s ease infinite; }
+        @keyframes animFloat { 0%, 100% { transform: translateY(0) rotate(0); } 33% { transform: translateY(-8px) rotate(5deg); } 66% { transform: translateY(5px) rotate(-5deg); } }
+        .anim-float { animation: animFloat 3s ease-in-out infinite; }
+        @keyframes animWobble { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-15deg); } 75% { transform: rotate(15deg); } }
+        .anim-wobble { animation: animWobble 0.5s ease-in-out infinite; }
+        @keyframes animHeartbeat { 0% { transform: scale(1); } 14% { transform: scale(1.25); } 28% { transform: scale(1); } 42% { transform: scale(1.25); } 70%, 100% { transform: scale(1); } }
+        .anim-heartbeat { animation: animHeartbeat 1.5s ease-in-out infinite; }
 
         /* --- Custom Universal Coin Icon --- */
         .coin-icon {
@@ -123,79 +179,35 @@
         @keyframes shopGridScroll { 0% { background-position: 0% 0%, 0% 0%, 0 0, 0 0; } 100% { background-position: 0% 0%, 0% 0%, 30px 30px, 30px 30px; } }
 
         /* --- SHOP ANIMATED TEXT EFFECTS --- */
-        
-        /* Floating & Shimmering Shop Title */
         .shop-title-animated {
             background: linear-gradient(90deg, #f1c40f, #e74c3c, #9b59b6, #00c6ff, #f1c40f);
-            background-size: 200% auto; 
-            color: transparent; 
-            -webkit-background-clip: text; 
-            background-clip: text;
+            background-size: 200% auto; color: transparent; -webkit-background-clip: text; background-clip: text;
             animation: fullBodyAnimate 4s linear infinite, floatTitle 3s ease-in-out infinite alternate; 
-            font-size: 2.5rem; font-size: clamp(2rem, 8vw, 3.5rem);
-            margin-bottom: 5px;
+            font-size: 2.5rem; font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 5px;
         }
-
-        @keyframes floatTitle {
-            from { transform: translateY(0px); filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); }
-            to { transform: translateY(-8px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.7)); }
-        }
-
-        /* Pulsing Neon Glow for "Get More Coins" */
-        .glow-text-animated {
-            color: #f1c40f;
-            text-align: center;
-            margin-top: 0;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: neonPulse 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes neonPulse {
-            from { text-shadow: 0 0 5px #f1c40f, 0 0 10px #e67e22; transform: scale(1); }
-            to { text-shadow: 0 0 15px #f1c40f, 0 0 25px #e74c3c, 0 0 35px #e74c3c; transform: scale(1.05); }
-        }
-
-        /* Flowing Liquid Gradient for Category Headers */
+        @keyframes floatTitle { from { transform: translateY(0px); filter: drop-shadow(0 5px 5px rgba(0,0,0,0.5)); } to { transform: translateY(-8px); filter: drop-shadow(0 15px 15px rgba(0,0,0,0.7)); } }
+        .glow-text-animated { color: #f1c40f; text-align: center; margin-top: 0; text-transform: uppercase; letter-spacing: 2px; animation: neonPulse 1.5s ease-in-out infinite alternate; }
+        @keyframes neonPulse { from { text-shadow: 0 0 5px #f1c40f, 0 0 10px #e67e22; transform: scale(1); } to { text-shadow: 0 0 15px #f1c40f, 0 0 25px #e74c3c, 0 0 35px #e74c3c; transform: scale(1.05); } }
         .category-title-animated {
-            background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff);
-            background-size: 200% auto;
-            color: transparent;
-            -webkit-background-clip: text;
-            background-clip: text;
-            animation: textGradientPan 3s linear infinite;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-            margin-top: 15px !important;
+            background: linear-gradient(90deg, #00c6ff, #0072ff, #00c6ff); background-size: 200% auto; color: transparent;
+            -webkit-background-clip: text; background-clip: text; animation: textGradientPan 3s linear infinite;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; margin-top: 15px !important;
         }
-
-        @keyframes textGradientPan {
-            to { background-position: 200% center; }
-        }
+        @keyframes textGradientPan { to { background-position: 200% center; } }
 
         /* --- Purchase Section --- */
         .purchase-box {
             background: rgba(0,0,0,0.6); padding: 20px 15px; border-radius: 15px; border: 1px solid #f1c40f; 
-            margin-bottom: 20px; box-shadow: 0 0 15px rgba(241,196,15,0.2); backdrop-filter: blur(5px);
-            display: flex; flex-direction: column; align-items: center;
+            margin-bottom: 20px; box-shadow: 0 0 15px rgba(241,196,15,0.2); backdrop-filter: blur(5px); display: flex; flex-direction: column; align-items: center;
         }
         .paypal-btn {
             display: block; width: 100%; background: #0070ba; color: #fff; padding: 12px; text-decoration: none; 
-            border-radius: 50px; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,112,186,0.4);
-            transition: transform 0.1s;
+            border-radius: 50px; font-weight: bold; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,112,186,0.4); transition: transform 0.1s;
         }
         .paypal-btn:active { transform: scale(0.98); }
-        
         .code-input-container { display: flex; gap: 8px; width: 100%; }
-        .code-input {
-            flex: 1; padding: 12px; border-radius: 50px; border: none; outline: none; 
-            text-align: center; font-weight: bold; text-transform: uppercase; font-size: 1rem; color: #333;
-        }
-        .redeem-btn {
-            margin: 0; min-width: 50px; width: 50px; padding: 0; 
-            background: linear-gradient(45deg, #2ecc71, #27ae60); box-shadow: none;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;
-        }
+        .code-input { flex: 1; padding: 12px; border-radius: 50px; border: none; outline: none; text-align: center; font-weight: bold; text-transform: uppercase; font-size: 1rem; color: #333; }
+        .redeem-btn { margin: 0; min-width: 50px; width: 50px; padding: 0; background: linear-gradient(45deg, #2ecc71, #27ae60); box-shadow: none; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; }
 
         /* --- Shop Styling --- */
         .shop-container { width: 100%; max-width: 450px; flex-grow: 1; overflow-y: auto; padding-bottom: 20px;}
@@ -204,14 +216,15 @@
         .shop-row::-webkit-scrollbar { display: none; } 
         
         .shop-item {
-            min-width: 100px; height: 120px; background: rgba(0,0,0,0.4);
+            min-width: 105px; height: 125px; background: rgba(0,0,0,0.4);
             border: 2px solid rgba(255,255,255,0.1); border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
             cursor: pointer; transition: 0.2s; backdrop-filter: blur(5px);
         }
         .shop-item.owned { border-color: rgba(255, 255, 255, 0.4); }
         .shop-item.selected { border-color: #f1c40f; background: rgba(241, 196, 15, 0.15); box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); transform: scale(1.05); }
-        .color-blob { width: 45px; height: 45px; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.5); }
+        .color-blob { width: 45px; height: 45px; border-radius: 50%; box-shadow: 0 2px 10px rgba(0,0,0,0.8); border: 2px solid rgba(255,255,255,0.5); position: relative; overflow: hidden; }
+        .color-blob.anim-demo { display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.5rem; background: rgba(255,255,255,0.1); color: #fff; }
         .item-name { font-size: 0.7rem; color: #fff; text-align: center; line-height: 1.2; margin: 0 2px; text-shadow: 0 1px 2px #000; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px;}
         .price-tag { font-size: 0.85rem; font-weight: bold; color: #f1c40f; text-shadow: 0 1px 2px #000;}
         .price-tag.owned-tag { color: #2ecc71; }
@@ -267,6 +280,44 @@
 </head>
 <body>
 
+    <!-- SVG Definitions for Lines and Writing -->
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <linearGradient id="grad-shimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffaa00"><animate attributeName="stop-color" values="#ffaa00; #ffffff; #ffaa00" dur="1s" repeatCount="indefinite"/></stop>
+                <stop offset="50%" stop-color="#ffffff"><animate attributeName="stop-color" values="#ffffff; #ffaa00; #ffffff" dur="1s" repeatCount="indefinite"/></stop>
+                <stop offset="100%" stop-color="#ffaa00"><animate attributeName="stop-color" values="#ffaa00; #ffffff; #ffaa00" dur="1s" repeatCount="indefinite"/></stop>
+            </linearGradient>
+
+            <radialGradient id="grad-radial" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="200">
+                <stop offset="0%" stop-color="#ffffff"><animate attributeName="stop-color" values="#ffffff;#00ffff;#ffffff" dur="1.5s" repeatCount="indefinite"/></stop>
+                <stop offset="50%" stop-color="#ff00ff" />
+                <stop offset="100%" stop-color="#ffff00" />
+                <animate attributeName="r" values="50; 300; 50" dur="2s" repeatCount="indefinite" />
+            </radialGradient>
+
+            <!-- Text Animation Gradients mapped to SVG for drawing strokes -->
+            <linearGradient id="grad-fire" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#ff0000"/><stop offset="100%" stop-color="#ffff00"/>
+            </linearGradient>
+            <radialGradient id="grad-ice">
+                <stop offset="0%" stop-color="#00ffff"/><stop offset="100%" stop-color="#0000ff"/>
+            </radialGradient>
+            <linearGradient id="grad-cyber" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ff00cc"/><stop offset="100%" stop-color="#333399"/>
+            </linearGradient>
+            <linearGradient id="grad-rich" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#bf953f"/><stop offset="33%" stop-color="#fcf6ba"/><stop offset="66%" stop-color="#b38728"/><stop offset="100%" stop-color="#fbf5b7"/>
+            </linearGradient>
+            <radialGradient id="grad-toxic">
+                <stop offset="0%" stop-color="#ccff00"/><stop offset="100%" stop-color="#009900"/>
+            </radialGradient>
+        </defs>
+    </svg>
+
+    <!-- Canvas Engine for Particles / Advanced BG -->
+    <canvas id="bg-canvas"></canvas>
+
     <div id="coin-display"><span class="coin-icon">C</span> <span id="coin-count">0</span></div>
 
     <!-- SCREEN 1: HOME -->
@@ -284,7 +335,6 @@
         <h2 class="shop-title-animated">Item Shop</h2>
         <div class="shop-container">
             
-            <!-- COIN PURCHASE SECTION -->
             <div class="purchase-box">
                 <h3 class="glow-text-animated">Get More Coins</h3>
                 <a href="https://www.paypal.com/ncp/payment/4FLLEG7EE35TA" target="_blank" class="paypal-btn">Buy 3000 <span class="coin-icon">C</span> for $1.00</a>
@@ -294,14 +344,17 @@
                 </div>
             </div>
 
-            <h3 class="category-title-animated">Animated Wallpapers</h3>
+            <h3 class="category-title-animated">Canvas & Wallpapers</h3>
             <div class="shop-row" id="shop-bg"></div>
 
-            <h3 class="category-title-animated">Player X Colors</h3>
-            <div class="shop-row" id="shop-x"></div>
-            
-            <h3 class="category-title-animated">Player O Colors</h3>
-            <div class="shop-row" id="shop-o"></div>
+            <h3 class="category-title-animated">Player Writing Style</h3>
+            <div class="shop-row" id="shop-styles"></div>
+
+            <h3 class="category-title-animated">Player Animations</h3>
+            <div class="shop-row" id="shop-anims"></div>
+
+            <h3 class="category-title-animated">Winning Line Effects</h3>
+            <div class="shop-row" id="shop-lines"></div>
         </div>
         <button class="secondary" onclick="showScreen('screen-home')" style="margin-top:10px;">Return Home</button>
     </div>
@@ -388,15 +441,29 @@
         let usedCodes =[];
 
         // --- SHOP ITEMS ---
-        const shopColors =[
-            { id: 'red', name: 'Ruby', hex: '#ff4d4d', price: 0 },
-            { id: 'blue', name: 'Ocean', hex: '#4d94ff', price: 0 },
-            { id: 'green', name: 'Emerald', hex: '#2ecc71', price: 50 },
-            { id: 'yellow', name: 'Lemon', hex: '#f1c40f', price: 50 },
-            { id: 'purple', name: 'Amethyst', hex: '#9b59b6', price: 100 },
-            { id: 'orange', name: 'Tiger', hex: '#e67e22', price: 100 },
-            { id: 'cyan', name: 'Diamond', hex: '#00ffff', price: 150 },
-            { id: 'gold', name: 'Pure Gold', hex: '#ffd700', price: 500 }
+        const shopStyles =[
+            { id: 'red', name: 'Ruby', type: 'solid', css: '#ff4d4d', svg: '#ff4d4d', price: 0 },
+            { id: 'blue', name: 'Ocean', type: 'solid', css: '#4d94ff', svg: '#4d94ff', price: 0 },
+            { id: 'green', name: 'Emerald', type: 'solid', css: '#2ecc71', svg: '#2ecc71', price: 50 },
+            { id: 'yellow', name: 'Lemon', type: 'solid', css: '#f1c40f', svg: '#f1c40f', price: 50 },
+            { id: 'purple', name: 'Amethyst', type: 'solid', css: '#9b59b6', svg: '#9b59b6', price: 100 },
+            { id: 'cyan', name: 'Diamond', type: 'solid', css: '#00ffff', svg: '#00ffff', price: 150 },
+            { id: 'gold', name: 'Pure Gold', type: 'solid', css: '#ffd700', svg: '#ffd700', price: 500 },
+            { id: 'grad-fire', name: 'Hellfire', type: 'gradient', css: 'linear-gradient(0deg, #ff0000, #ffff00)', svg: 'url(#grad-fire)', price: 1000 },
+            { id: 'grad-ice', name: 'Ice Radial', type: 'radial', css: 'radial-gradient(circle, #00ffff, #0000ff)', svg: 'url(#grad-ice)', price: 1000 },
+            { id: 'grad-cyber', name: 'Cyberpunk', type: 'gradient', css: 'linear-gradient(90deg, #ff00cc, #333399)', svg: 'url(#grad-cyber)', price: 1500 },
+            { id: 'grad-rich', name: 'Rich Gold', type: 'gradient', css: 'linear-gradient(45deg, #bf953f, #fcf6ba, #b38728, #fbf5b7)', svg: 'url(#grad-rich)', price: 2000 },
+            { id: 'grad-toxic', name: 'Toxic Radial', type: 'radial', css: 'radial-gradient(circle, #ccff00, #009900)', svg: 'url(#grad-toxic)', price: 2500 }
+        ];
+
+        const shopAnimations =[
+            { id: 'none', name: 'None', cssClass: '', price: 0 },
+            { id: 'anim-pulse', name: 'Pulse', cssClass: 'anim-pulse', price: 300 },
+            { id: 'anim-wobble', name: 'Wobble', cssClass: 'anim-wobble', price: 500 },
+            { id: 'anim-bounce', name: 'Bounce', cssClass: 'anim-bounce', price: 800 },
+            { id: 'anim-spin', name: 'Spin', cssClass: 'anim-spin', price: 1000 },
+            { id: 'anim-float', name: 'Float', cssClass: 'anim-float', price: 1200 },
+            { id: 'anim-heartbeat', name: 'Heartbeat', cssClass: 'anim-heartbeat', price: 2000 }
         ];
 
         const shopBackgrounds =[
@@ -412,16 +479,40 @@
             { id: 'bg-wp-4', name: 'Cosmic Dust', css: 'radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)), radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)), radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)), radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)), #050505', type: 'wallpaper-cosmic', price: 2000 },
             { id: 'bg-wp-5', name: 'Plasma Flow', css: 'linear-gradient(45deg, #ff007f, #7f00ff, #00ffff, #00ff7f)', type: 'wallpaper-plasma', price: 2500 },
             { id: 'bg-wp-6', name: 'Glitch Matrix', css: 'repeating-linear-gradient(90deg, rgba(0,255,0,0.1) 0px, rgba(0,255,0,0.1) 2px, transparent 2px, transparent 10px), repeating-linear-gradient(0deg, rgba(0,255,0,0.1) 0px, rgba(0,255,0,0.1) 2px, transparent 2px, transparent 10px), #051005', type: 'wallpaper-glitch', price: 3000 },
-            { id: 'bg-wp-7', name: 'Hellfire', css: 'radial-gradient(circle at 50% 50%, #ff5722, #c0392b, #000)', type: 'wallpaper-fire', price: 3500 }
+            { id: 'bg-wp-7', name: 'Hellfire', css: 'radial-gradient(circle at 50% 50%, #ff5722, #c0392b, #000)', type: 'wallpaper-fire', price: 3500 },
+            { id: 'bg-wp-8', name: 'Aurora', css: 'linear-gradient(120deg, #16a085, #f4d03f, #3498db)', type: 'wallpaper-aurora', price: 4000 },
+            { id: 'bg-wp-9', name: 'Quantum Grid', css: 'linear-gradient(transparent 90%, rgba(255, 0, 255, 0.5) 100%), linear-gradient(90deg, transparent 90%, rgba(0, 255, 255, 0.5) 100%), #0a0a0a', type: 'wallpaper-quantum', price: 4500 },
+            { id: 'bg-wp-10', name: 'Neon Pulse', css: 'radial-gradient(circle at center, #ff0055, #0000ff, #000000)', type: 'wallpaper-neonpulse', price: 5000 },
+            { id: 'bg-wp-11', name: 'Deep Space', css: '#030510', type: 'wallpaper-planets', price: 6000 },
+            
+            // --- NEW: JAVASCRIPT CANVAS BACKGROUNDS ---
+            { id: 'canvas-snow', name: 'Winter Drift', preview: 'linear-gradient(180deg, #0b0f19, #1c2841)', type: 'canvas', price: 7000 },
+            { id: 'canvas-matrix', name: 'Digital Rain', preview: 'linear-gradient(180deg, #000, #030)', type: 'canvas', price: 8000 },
+            { id: 'canvas-particles', name: 'Neural Net', preview: 'radial-gradient(circle, #2c3e50, #000)', type: 'canvas', price: 9000 },
+            { id: 'canvas-warp', name: 'Warp Drive', preview: 'radial-gradient(circle, #fff, #000)', type: 'canvas', price: 10000 }
         ];
 
-        let ownedX = ['#ff4d4d'];
-        let ownedO =['#4d94ff'];
-        let ownedBg = ['default'];
-        
-        let selectedX = '#ff4d4d';
-        let selectedO = '#4d94ff';
+        const shopLines =[
+            { id: 'line-solid', name: 'Solid', type: 'solid', price: 0 },
+            { id: 'line-shimmer', name: 'Gold Shimmer', type: 'shimmer', price: 1000 },
+            { id: 'line-radial', name: 'Radial Burst', type: 'radial', price: 1500 }
+        ];
+
+        let ownedStylesX = ['red'];
+        let ownedStylesO = ['blue'];
+        let selectedStyleX = 'red';
+        let selectedStyleO = 'blue';
+
+        let ownedAnimX = ['none'];
+        let ownedAnimO = ['none'];
+        let selectedAnimX = 'none';
+        let selectedAnimO = 'none';
+
+        let ownedBg =['default'];
         let selectedBg = 'default';
+
+        let ownedLines = ['line-solid'];
+        let selectedLine = 'line-solid';
 
         const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
@@ -476,6 +567,170 @@
         document.body.addEventListener('click', initAudio, { once: true });
         document.body.addEventListener('touchstart', initAudio, { once: true });
 
+        // --- CANVAS ENGINE ---
+        const cvs = document.getElementById('bg-canvas');
+        const ctx = cvs.getContext('2d');
+        let animFrameId = null;
+        let currentCanvasType = null;
+        let canvasData = {};
+
+        function resizeCanvas() {
+            cvs.width = window.innerWidth;
+            cvs.height = window.innerHeight;
+            if (currentCanvasType) {
+                startCanvasAnimation(currentCanvasType, true);
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function stopCanvasAnimation() {
+            if (animFrameId) {
+                cancelAnimationFrame(animFrameId);
+                animFrameId = null;
+            }
+            cvs.style.display = 'none';
+            currentCanvasType = null;
+        }
+
+        function startCanvasAnimation(type, isResize = false) {
+            if (!isResize) stopCanvasAnimation();
+            currentCanvasType = type;
+            cvs.style.display = 'block';
+            
+            if (!isResize) {
+                cvs.width = window.innerWidth;
+                cvs.height = window.innerHeight;
+            }
+
+            if (type === 'canvas-matrix') {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*'.split('');
+                const fontSize = 16;
+                const columns = Math.floor(cvs.width / fontSize) + 1;
+                if(!isResize) {
+                    canvasData.drops = [];
+                    for(let x = 0; x < columns; x++) canvasData.drops[x] = 1;
+                }
+                function drawMatrix() {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                    ctx.fillRect(0, 0, cvs.width, cvs.height);
+                    ctx.fillStyle = '#0F0';
+                    ctx.font = fontSize + 'px monospace';
+                    for(let i = 0; i < canvasData.drops.length; i++) {
+                        const text = chars[Math.floor(Math.random() * chars.length)];
+                        ctx.fillText(text, i * fontSize, canvasData.drops[i] * fontSize);
+                        if(canvasData.drops[i] * fontSize > cvs.height && Math.random() > 0.975) canvasData.drops[i] = 0;
+                        canvasData.drops[i]++;
+                    }
+                    animFrameId = requestAnimationFrame(drawMatrix);
+                }
+                if(!isResize) drawMatrix();
+            } 
+            else if (type === 'canvas-particles') {
+                if(!isResize) {
+                    canvasData.particles =[];
+                    for(let i=0; i<80; i++) {
+                        canvasData.particles.push({
+                            x: Math.random()*cvs.width, y: Math.random()*cvs.height,
+                            vx: (Math.random()-0.5)*2, vy: (Math.random()-0.5)*2
+                        });
+                    }
+                }
+                function drawParticles() {
+                    ctx.fillStyle = '#111';
+                    ctx.fillRect(0, 0, cvs.width, cvs.height);
+                    ctx.strokeStyle = 'rgba(0, 198, 255, 0.15)';
+                    ctx.lineWidth = 1;
+                    
+                    let pts = canvasData.particles;
+                    for(let i=0; i<pts.length; i++) {
+                        for(let j=i+1; j<pts.length; j++) {
+                            let dx = pts[i].x - pts[j].x;
+                            let dy = pts[i].y - pts[j].y;
+                            if (dx*dx + dy*dy < 15000) {
+                                ctx.beginPath(); ctx.moveTo(pts[i].x, pts[i].y); ctx.lineTo(pts[j].x, pts[j].y); ctx.stroke();
+                            }
+                        }
+                    }
+                    ctx.fillStyle = '#00c6ff';
+                    pts.forEach(p => {
+                        p.x += p.vx; p.y += p.vy;
+                        if(p.x < 0 || p.x > cvs.width) p.vx *= -1;
+                        if(p.y < 0 || p.y > cvs.height) p.vy *= -1;
+                        ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+                    });
+                    animFrameId = requestAnimationFrame(drawParticles);
+                }
+                if(!isResize) drawParticles();
+            }
+            else if (type === 'canvas-warp') {
+                if(!isResize) {
+                    canvasData.stars =[];
+                    for(let i=0; i<300; i++) {
+                        canvasData.stars.push({
+                            x: (Math.random()-0.5)*cvs.width,
+                            y: (Math.random()-0.5)*cvs.height,
+                            z: Math.random()*cvs.width
+                        });
+                    }
+                }
+                function drawWarp() {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+                    ctx.fillRect(0, 0, cvs.width, cvs.height);
+                    ctx.save();
+                    ctx.translate(cvs.width/2, cvs.height/2);
+                    for(let s of canvasData.stars) {
+                        s.z -= 5;
+                        if(s.z <= 0) {
+                            s.x = (Math.random()-0.5)*cvs.width;
+                            s.y = (Math.random()-0.5)*cvs.height;
+                            s.z = cvs.width;
+                        }
+                        let sx = (s.x / s.z) * cvs.width;
+                        let sy = (s.y / s.z) * cvs.width;
+                        let size = (1 - s.z / cvs.width) * 3;
+                        ctx.fillStyle = '#fff';
+                        ctx.beginPath(); ctx.arc(sx, sy, size, 0, Math.PI*2); ctx.fill();
+                    }
+                    ctx.restore();
+                    animFrameId = requestAnimationFrame(drawWarp);
+                }
+                if(!isResize) drawWarp();
+            }
+            else if (type === 'canvas-snow') {
+                if(!isResize) {
+                    canvasData.flakes =[];
+                    canvasData.angle = 0;
+                    for(let i=0; i<150; i++) {
+                        canvasData.flakes.push({
+                            x: Math.random()*cvs.width, y: Math.random()*cvs.height,
+                            r: Math.random()*3+1, d: Math.random()*1
+                        });
+                    }
+                }
+                function drawSnow() {
+                    ctx.fillStyle = '#0b0f19';
+                    ctx.fillRect(0, 0, cvs.width, cvs.height);
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                    canvasData.angle += 0.01;
+                    for(let i=0; i<canvasData.flakes.length; i++) {
+                        let p = canvasData.flakes[i];
+                        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true); ctx.fill();
+                        p.y += Math.cos(canvasData.angle + p.d) + 1 + p.r/2;
+                        p.x += Math.sin(canvasData.angle) * 2;
+                        if(p.x > cvs.width+5 || p.x < -5 || p.y > cvs.height) {
+                            if(i%3 > 0) canvasData.flakes[i] = {x: Math.random()*cvs.width, y: -10, r: p.r, d: p.d};
+                            else {
+                                if(Math.sin(canvasData.angle)>0) canvasData.flakes[i] = {x: -5, y: Math.random()*cvs.height, r: p.r, d: p.d};
+                                else canvasData.flakes[i] = {x: cvs.width+5, y: Math.random()*cvs.height, r: p.r, d: p.d};
+                            }
+                        }
+                    }
+                    animFrameId = requestAnimationFrame(drawSnow);
+                }
+                if(!isResize) drawSnow();
+            }
+        }
+
         // --- INITIALIZATION ---
         window.onload = () => {
             loadProgress();
@@ -483,14 +738,20 @@
             updateCoinDisplay();
         };
 
-        window.addEventListener('resize', () => {
-            if (lastWinningCombo && !gameActive) drawLine(lastWinningCombo);
-        });
-
         function showScreen(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active-screen'));
             document.getElementById(id).classList.add('active-screen');
             resetEffects();
+        }
+
+        function migrateOldColors(list, fallbackId) {
+            return list.map(val => {
+                if(val.startsWith('#')) {
+                    let match = shopStyles.find(c => c.css === val);
+                    return match ? match.id : fallbackId;
+                }
+                return val;
+            });
         }
 
         function loadProgress() {
@@ -498,14 +759,23 @@
             maxUnlockedPvP = parseInt(localStorage.getItem('ttt_max_pvp')) || 1;
             coins = parseInt(localStorage.getItem('ttt_coins')) || 0;
             
-            try { ownedX = JSON.parse(localStorage.getItem('ttt_owned_x')) ||['#ff4d4d']; } catch(e){}
-            try { ownedO = JSON.parse(localStorage.getItem('ttt_owned_o')) ||['#4d94ff']; } catch(e){}
+            try { ownedStylesX = migrateOldColors(JSON.parse(localStorage.getItem('ttt_owned_x')) ||['red'], 'red'); } catch(e){ ownedStylesX = ['red']; }
+            try { ownedStylesO = migrateOldColors(JSON.parse(localStorage.getItem('ttt_owned_o')) ||['blue'], 'blue'); } catch(e){ ownedStylesO = ['blue']; }
+            selectedStyleX = migrateOldColors([localStorage.getItem('ttt_selected_x') || 'red'], 'red')[0];
+            selectedStyleO = migrateOldColors([localStorage.getItem('ttt_selected_o') || 'blue'], 'blue')[0];
+
+            try { ownedAnimX = JSON.parse(localStorage.getItem('ttt_owned_anim_x')) || ['none']; } catch(e){}
+            try { ownedAnimO = JSON.parse(localStorage.getItem('ttt_owned_anim_o')) || ['none']; } catch(e){}
+            selectedAnimX = localStorage.getItem('ttt_selected_anim_x') || 'none';
+            selectedAnimO = localStorage.getItem('ttt_selected_anim_o') || 'none';
+
             try { ownedBg = JSON.parse(localStorage.getItem('ttt_owned_bg')) || ['default']; } catch(e){}
-            try { usedCodes = JSON.parse(localStorage.getItem('ttt_used_codes')) ||[]; } catch(e){}
-            
-            selectedX = localStorage.getItem('ttt_selected_x') || '#ff4d4d';
-            selectedO = localStorage.getItem('ttt_selected_o') || '#4d94ff';
             selectedBg = localStorage.getItem('ttt_selected_bg') || 'default';
+
+            try { ownedLines = JSON.parse(localStorage.getItem('ttt_owned_lines')) ||['line-solid']; } catch(e){ ownedLines =['line-solid']; }
+            selectedLine = localStorage.getItem('ttt_selected_line') || 'line-solid';
+
+            try { usedCodes = JSON.parse(localStorage.getItem('ttt_used_codes')) ||[]; } catch(e){}
         }
 
         function saveCoins() {
@@ -523,18 +793,8 @@
             const code = input.value.trim().toUpperCase();
 
             if (code === "") return;
-
-            if (!validPromoCodes.includes(code)) {
-                alert("Invalid Promo Code!");
-                playTone('error');
-                return;
-            }
-
-            if (usedCodes.includes(code)) {
-                alert("This code has already been used on this device.");
-                playTone('error');
-                return;
-            }
+            if (!validPromoCodes.includes(code)) { alert("Invalid Promo Code!"); playTone('error'); return; }
+            if (usedCodes.includes(code)) { alert("This code has already been used on this device."); playTone('error'); return; }
 
             coins += 3000;
             usedCodes.push(code);
@@ -571,6 +831,9 @@
                 
                 selectedBg = 'default';
                 localStorage.setItem('ttt_selected_bg', selectedBg);
+
+                selectedLine = 'line-solid';
+                localStorage.setItem('ttt_selected_line', selectedLine);
             } catch(e) {}
             
             applyTheme(bg, cell, line);
@@ -583,26 +846,41 @@
             
             let finalBg = bg;
             let finalClass = '';
+            let isCanvas = false;
 
             if (selectedBg !== 'default') {
                 const premiumBg = shopBackgrounds.find(b => b.id === selectedBg);
                 if (premiumBg) {
-                    finalBg = premiumBg.css;
-                    if (premiumBg.type === 'animated') finalClass = 'bg-anim-flow';
-                    else if (premiumBg.type === 'wallpaper-stripes') finalClass = 'bg-wallpaper-stripes';
-                    else if (premiumBg.type === 'wallpaper-grid') finalClass = 'bg-wallpaper-grid';
-                    else if (premiumBg.type === 'wallpaper-speed') finalClass = 'bg-wallpaper-speed';
-                    else if (premiumBg.type === 'wallpaper-cosmic') finalClass = 'bg-wallpaper-cosmic';
-                    else if (premiumBg.type === 'wallpaper-plasma') finalClass = 'bg-wallpaper-plasma';
-                    else if (premiumBg.type === 'wallpaper-glitch') finalClass = 'bg-wallpaper-glitch';
-                    else if (premiumBg.type === 'wallpaper-fire') finalClass = 'bg-wallpaper-fire';
+                    if (premiumBg.type === 'canvas') {
+                        isCanvas = true;
+                    } else {
+                        finalBg = premiumBg.css;
+                        if (premiumBg.type === 'animated') finalClass = 'bg-anim-flow';
+                        else if (premiumBg.type === 'wallpaper-stripes') finalClass = 'bg-wallpaper-stripes';
+                        else if (premiumBg.type === 'wallpaper-grid') finalClass = 'bg-wallpaper-grid';
+                        else if (premiumBg.type === 'wallpaper-speed') finalClass = 'bg-wallpaper-speed';
+                        else if (premiumBg.type === 'wallpaper-cosmic') finalClass = 'bg-wallpaper-cosmic';
+                        else if (premiumBg.type === 'wallpaper-plasma') finalClass = 'bg-wallpaper-plasma';
+                        else if (premiumBg.type === 'wallpaper-glitch') finalClass = 'bg-wallpaper-glitch';
+                        else if (premiumBg.type === 'wallpaper-fire') finalClass = 'bg-wallpaper-fire';
+                        else if (premiumBg.type === 'wallpaper-aurora') finalClass = 'bg-wallpaper-aurora';
+                        else if (premiumBg.type === 'wallpaper-quantum') finalClass = 'bg-wallpaper-quantum';
+                        else if (premiumBg.type === 'wallpaper-neonpulse') finalClass = 'bg-wallpaper-neonpulse';
+                        else if (premiumBg.type === 'wallpaper-planets') finalClass = 'bg-wallpaper-planets';
+                    }
                 }
             }
 
-            document.body.style.background = finalBg;
-            
-            document.body.classList.remove('bg-anim-flow', 'bg-wallpaper-stripes', 'bg-wallpaper-grid', 'bg-wallpaper-speed', 'bg-wallpaper-cosmic', 'bg-wallpaper-plasma', 'bg-wallpaper-glitch', 'bg-wallpaper-fire');
-            if (finalClass) document.body.classList.add(finalClass);
+            if (isCanvas) {
+                document.body.style.background = 'transparent';
+                document.body.classList.remove('bg-anim-flow', 'bg-wallpaper-stripes', 'bg-wallpaper-grid', 'bg-wallpaper-speed', 'bg-wallpaper-cosmic', 'bg-wallpaper-plasma', 'bg-wallpaper-glitch', 'bg-wallpaper-fire', 'bg-wallpaper-aurora', 'bg-wallpaper-quantum', 'bg-wallpaper-neonpulse', 'bg-wallpaper-planets');
+                startCanvasAnimation(selectedBg);
+            } else {
+                stopCanvasAnimation();
+                document.body.style.background = finalBg;
+                document.body.classList.remove('bg-anim-flow', 'bg-wallpaper-stripes', 'bg-wallpaper-grid', 'bg-wallpaper-speed', 'bg-wallpaper-cosmic', 'bg-wallpaper-plasma', 'bg-wallpaper-glitch', 'bg-wallpaper-fire', 'bg-wallpaper-aurora', 'bg-wallpaper-quantum', 'bg-wallpaper-neonpulse', 'bg-wallpaper-planets');
+                if (finalClass) document.body.classList.add(finalClass);
+            }
             
             const metaTheme = document.querySelector('meta[name="theme-color"]');
             if(metaTheme) metaTheme.setAttribute('content', '#1a1a1a'); 
@@ -623,12 +901,14 @@
 
         function renderShop() {
             const shopBg = document.getElementById('shop-bg');
-            const shopX = document.getElementById('shop-x');
-            const shopO = document.getElementById('shop-o');
+            const shopStylesContainer = document.getElementById('shop-styles');
+            const shopAnimsContainer = document.getElementById('shop-anims');
+            const shopLinesContainer = document.getElementById('shop-lines');
             
             shopBg.innerHTML = '';
-            shopX.innerHTML = '';
-            shopO.innerHTML = '';
+            shopStylesContainer.innerHTML = '';
+            shopAnimsContainer.innerHTML = '';
+            shopLinesContainer.innerHTML = '';
 
             shopBackgrounds.forEach(item => {
                 if (item.id === 'default') return; 
@@ -637,18 +917,28 @@
                 let isSelected = selectedBg === item.id;
                 btn.className = `shop-item ${isOwned ? 'owned' : ''} ${isSelected ? 'selected' : ''}`;
                 
-                let animClass = '';
-                if (item.type === 'animated') animClass = 'bg-anim-flow';
-                else if (item.type === 'wallpaper-stripes') animClass = 'bg-wallpaper-stripes';
-                else if (item.type === 'wallpaper-grid') animClass = 'bg-wallpaper-grid';
-                else if (item.type === 'wallpaper-speed') animClass = 'bg-wallpaper-speed';
-                else if (item.type === 'wallpaper-cosmic') animClass = 'bg-wallpaper-cosmic';
-                else if (item.type === 'wallpaper-plasma') animClass = 'bg-wallpaper-plasma';
-                else if (item.type === 'wallpaper-glitch') animClass = 'bg-wallpaper-glitch';
-                else if (item.type === 'wallpaper-fire') animClass = 'bg-wallpaper-fire';
-                
+                let previewHtml = '';
+                if (item.type === 'canvas') {
+                    previewHtml = `<div class="color-blob" style="background: ${item.preview}; border-radius: 8px; width: 60px;"></div>`;
+                } else {
+                    let animClass = '';
+                    if (item.type === 'animated') animClass = 'bg-anim-flow';
+                    else if (item.type === 'wallpaper-stripes') animClass = 'bg-wallpaper-stripes';
+                    else if (item.type === 'wallpaper-grid') animClass = 'bg-wallpaper-grid';
+                    else if (item.type === 'wallpaper-speed') animClass = 'bg-wallpaper-speed';
+                    else if (item.type === 'wallpaper-cosmic') animClass = 'bg-wallpaper-cosmic';
+                    else if (item.type === 'wallpaper-plasma') animClass = 'bg-wallpaper-plasma';
+                    else if (item.type === 'wallpaper-glitch') animClass = 'bg-wallpaper-glitch';
+                    else if (item.type === 'wallpaper-fire') animClass = 'bg-wallpaper-fire';
+                    else if (item.type === 'wallpaper-aurora') animClass = 'bg-wallpaper-aurora';
+                    else if (item.type === 'wallpaper-quantum') animClass = 'bg-wallpaper-quantum';
+                    else if (item.type === 'wallpaper-neonpulse') animClass = 'bg-wallpaper-neonpulse';
+                    else if (item.type === 'wallpaper-planets') animClass = 'bg-wallpaper-planets';
+                    previewHtml = `<div class="color-blob ${animClass}" style="background: ${item.css}; border-radius: 8px; width: 60px;"></div>`;
+                }
+
                 btn.innerHTML = `
-                    <div class="color-blob ${animClass}" style="background: ${item.css}; border-radius: 8px; width: 60px;"></div>
+                    ${previewHtml}
                     <div class="item-name">${item.name}</div>
                     <div class="price-tag ${isOwned ? 'owned-tag' : ''}">${isOwned ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
                 `;
@@ -656,30 +946,83 @@
                 shopBg.appendChild(btn);
             });
 
-            shopColors.forEach(item => {
+            shopStyles.forEach(item => {
                 let btnX = document.createElement('div');
-                let isOwnedX = ownedX.includes(item.hex);
-                let isSelectedX = selectedX === item.hex;
+                let isOwnedX = ownedStylesX.includes(item.id);
+                let isSelectedX = selectedStyleX === item.id;
                 btnX.className = `shop-item ${isOwnedX ? 'owned' : ''} ${isSelectedX ? 'selected' : ''}`;
+                let styleStr = item.type === 'gradient' || item.type === 'radial' 
+                    ? `background: ${item.css}; -webkit-background-clip: text; -webkit-text-fill-color: transparent;` 
+                    : `color: ${item.css};`;
                 btnX.innerHTML = `
-                    <div class="color-blob" style="background: ${item.hex};"></div>
-                    <div class="item-name">${item.name}</div>
+                    <div class="color-blob anim-demo" style="background: rgba(255,255,255,0.1);">
+                        <span style="${styleStr} font-size:1.8rem; font-weight:bold; display:inline-block;">X</span>
+                    </div>
+                    <div class="item-name">[X] ${item.name}</div>
                     <div class="price-tag ${isOwnedX ? 'owned-tag' : ''}">${isOwnedX ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
                 `;
-                btnX.onclick = () => handleBuy('X', item);
-                shopX.appendChild(btnX);
+                btnX.onclick = () => handleStyleBuy('X', item);
+                shopStylesContainer.appendChild(btnX);
 
                 let btnO = document.createElement('div');
-                let isOwnedO = ownedO.includes(item.hex);
-                let isSelectedO = selectedO === item.hex;
+                let isOwnedO = ownedStylesO.includes(item.id);
+                let isSelectedO = selectedStyleO === item.id;
                 btnO.className = `shop-item ${isOwnedO ? 'owned' : ''} ${isSelectedO ? 'selected' : ''}`;
                 btnO.innerHTML = `
-                    <div class="color-blob" style="background: ${item.hex};"></div>
-                    <div class="item-name">${item.name}</div>
+                    <div class="color-blob anim-demo" style="background: rgba(255,255,255,0.1);">
+                        <span style="${styleStr} font-size:1.8rem; font-weight:bold; display:inline-block;">O</span>
+                    </div>
+                    <div class="item-name">[O] ${item.name}</div>
                     <div class="price-tag ${isOwnedO ? 'owned-tag' : ''}">${isOwnedO ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
                 `;
-                btnO.onclick = () => handleBuy('O', item);
-                shopO.appendChild(btnO);
+                btnO.onclick = () => handleStyleBuy('O', item);
+                shopStylesContainer.appendChild(btnO);
+            });
+
+            shopAnimations.forEach(item => {
+                if (item.id === 'none') return;
+                
+                let btnX = document.createElement('div');
+                let isOwnedX = ownedAnimX.includes(item.id);
+                let isSelectedX = selectedAnimX === item.id;
+                btnX.className = `shop-item ${isOwnedX ? 'owned' : ''} ${isSelectedX ? 'selected' : ''}`;
+                btnX.innerHTML = `
+                    <div class="color-blob anim-demo"><span class="${item.cssClass}">X</span></div>
+                    <div class="item-name">[X] ${item.name}</div>
+                    <div class="price-tag ${isOwnedX ? 'owned-tag' : ''}">${isOwnedX ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
+                `;
+                btnX.onclick = () => handleAnimBuy('X', item);
+                shopAnimsContainer.appendChild(btnX);
+
+                let btnO = document.createElement('div');
+                let isOwnedO = ownedAnimO.includes(item.id);
+                let isSelectedO = selectedAnimO === item.id;
+                btnO.className = `shop-item ${isOwnedO ? 'owned' : ''} ${isSelectedO ? 'selected' : ''}`;
+                btnO.innerHTML = `
+                    <div class="color-blob anim-demo"><span class="${item.cssClass}">O</span></div>
+                    <div class="item-name">[O] ${item.name}</div>
+                    <div class="price-tag ${isOwnedO ? 'owned-tag' : ''}">${isOwnedO ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
+                `;
+                btnO.onclick = () => handleAnimBuy('O', item);
+                shopAnimsContainer.appendChild(btnO);
+            });
+
+            shopLines.forEach(item => {
+                if (item.id === 'line-solid') return; 
+                let btn = document.createElement('div');
+                let isOwned = ownedLines.includes(item.id);
+                let isSelected = selectedLine === item.id;
+                btn.className = `shop-item ${isOwned ? 'owned' : ''} ${isSelected ? 'selected' : ''}`;
+                
+                let previewStyle = item.id === 'line-shimmer' ? 'background: linear-gradient(90deg, #ffaa00, #fff, #ffaa00);' : 'background: radial-gradient(circle, #fff, #00ffff);';
+                
+                btn.innerHTML = `
+                    <div class="color-blob" style="${previewStyle} border-radius: 4px; width: 60px; height: 10px;"></div>
+                    <div class="item-name">${item.name}</div>
+                    <div class="price-tag ${isOwned ? 'owned-tag' : ''}">${isOwned ? '✓ Equip' : '<span class="coin-icon">C</span> ' + item.price}</div>
+                `;
+                btn.onclick = () => handleLineBuy(item);
+                shopLinesContainer.appendChild(btn);
             });
         }
 
@@ -709,34 +1052,94 @@
             renderShop();
         }
 
-        function handleBuy(player, item) {
-            let ownedList = player === 'X' ? ownedX : ownedO;
-            
-            if (ownedList.includes(item.hex)) {
+        function handleStyleBuy(player, item) {
+            let ownedList = player === 'X' ? ownedStylesX : ownedStylesO;
+            if (ownedList.includes(item.id)) {
                 if (player === 'X') {
-                    selectedX = item.hex;
-                    try { localStorage.setItem('ttt_selected_x', selectedX); } catch(e){}
+                    selectedStyleX = item.id;
+                    try { localStorage.setItem('ttt_selected_x', selectedStyleX); } catch(e){}
                 } else {
-                    selectedO = item.hex;
-                    try { localStorage.setItem('ttt_selected_o', selectedO); } catch(e){}
+                    selectedStyleO = item.id;
+                    try { localStorage.setItem('ttt_selected_o', selectedStyleO); } catch(e){}
                 }
                 playTone('move');
             } else {
                 if (coins >= item.price) {
                     coins -= item.price;
                     saveCoins();
-                    ownedList.push(item.hex);
-                    
+                    ownedList.push(item.id);
                     try {
                         if (player === 'X') {
-                            selectedX = item.hex;
-                            localStorage.setItem('ttt_owned_x', JSON.stringify(ownedX));
-                            localStorage.setItem('ttt_selected_x', selectedX);
+                            selectedStyleX = item.id;
+                            localStorage.setItem('ttt_owned_x', JSON.stringify(ownedList));
+                            localStorage.setItem('ttt_selected_x', selectedStyleX);
                         } else {
-                            selectedO = item.hex;
-                            localStorage.setItem('ttt_owned_o', JSON.stringify(ownedO));
-                            localStorage.setItem('ttt_selected_o', selectedO);
+                            selectedStyleO = item.id;
+                            localStorage.setItem('ttt_owned_o', JSON.stringify(ownedList));
+                            localStorage.setItem('ttt_selected_o', selectedStyleO);
                         }
+                    } catch(e){}
+                    playTone('buy');
+                } else {
+                    alert("Not enough coins!");
+                    playTone('error');
+                    return;
+                }
+            }
+            renderShop();
+        }
+
+        function handleAnimBuy(player, item) {
+            let ownedList = player === 'X' ? ownedAnimX : ownedAnimO;
+            if (ownedList.includes(item.id)) {
+                if (player === 'X') {
+                    selectedAnimX = item.id;
+                    try { localStorage.setItem('ttt_selected_anim_x', selectedAnimX); } catch(e){}
+                } else {
+                    selectedAnimO = item.id;
+                    try { localStorage.setItem('ttt_selected_anim_o', selectedAnimO); } catch(e){}
+                }
+                playTone('move');
+            } else {
+                if (coins >= item.price) {
+                    coins -= item.price;
+                    saveCoins();
+                    ownedList.push(item.id);
+                    try {
+                        if (player === 'X') {
+                            selectedAnimX = item.id;
+                            localStorage.setItem('ttt_owned_anim_x', JSON.stringify(ownedList));
+                            localStorage.setItem('ttt_selected_anim_x', selectedAnimX);
+                        } else {
+                            selectedAnimO = item.id;
+                            localStorage.setItem('ttt_owned_anim_o', JSON.stringify(ownedList));
+                            localStorage.setItem('ttt_selected_anim_o', selectedAnimO);
+                        }
+                    } catch(e){}
+                    playTone('buy');
+                } else {
+                    alert("Not enough coins!");
+                    playTone('error');
+                    return;
+                }
+            }
+            renderShop();
+        }
+
+        function handleLineBuy(item) {
+            if (ownedLines.includes(item.id)) {
+                selectedLine = item.id;
+                try { localStorage.setItem('ttt_selected_line', selectedLine); } catch(e){}
+                playTone('move');
+            } else {
+                if (coins >= item.price) {
+                    coins -= item.price;
+                    saveCoins();
+                    ownedLines.push(item.id);
+                    selectedLine = item.id;
+                    try {
+                        localStorage.setItem('ttt_owned_lines', JSON.stringify(ownedLines));
+                        localStorage.setItem('ttt_selected_line', selectedLine);
                     } catch(e){}
                     playTone('buy');
                 } else {
@@ -812,8 +1215,7 @@
             
             const cells = document.querySelectorAll('.cell');
             cells.forEach(c => {
-                c.innerText = "";
-                c.style.color = "";
+                c.innerHTML = "";
             });
             resetEffects();
         }
@@ -821,12 +1223,14 @@
         function resetEffects() {
             document.body.classList.remove('glow-red', 'glow-green', 'glow-blue');
             document.querySelectorAll('.cell').forEach(c => c.classList.remove('glow-red', 'glow-blue'));
-            document.getElementById('win-line').setAttribute('stroke-width', '0');
+            const winLine = document.getElementById('win-line');
+            winLine.setAttribute('stroke-width', '0');
+            winLine.style.animation = "none";
         }
 
         document.querySelectorAll('.cell').forEach(cell => {
             cell.addEventListener('click', (e) => {
-                const idx = e.target.getAttribute('data-i');
+                const idx = e.currentTarget.getAttribute('data-i');
                 if(gameState[idx] !== "" || !gameActive) return;
 
                 processMove(idx, currentPlayer);
@@ -846,11 +1250,35 @@
             });
         });
 
+        // Draws the X and O using SVG paths
         function processMove(index, player) {
             gameState[index] = player;
             const cell = document.querySelector(`.cell[data-i='${index}']`);
-            cell.innerText = player;
-            cell.style.color = player === 'X' ? selectedX : selectedO;
+            
+            let colorItem = player === 'X' ? shopStyles.find(c => c.id === selectedStyleX) : shopStyles.find(c => c.id === selectedStyleO);
+            let animItem = player === 'X' ? shopAnimations.find(a => a.id === selectedAnimX) : shopAnimations.find(a => a.id === selectedAnimO);
+            
+            if(!colorItem) colorItem = shopStyles[0];
+            if(!animItem) animItem = shopAnimations[0];
+
+            let strokeColor = colorItem.svg; 
+            let animClass = animItem.cssClass;
+            let svgHtml = '';
+
+            if(player === 'X') {
+                svgHtml = `
+                <svg viewBox="0 0 100 100" style="width:70%; height:70%; overflow:visible;">
+                    <path class="draw-x-path1" d="M 15 15 L 85 85" stroke="${strokeColor}" stroke-width="15" stroke-linecap="round" fill="none" />
+                    <path class="draw-x-path2" d="M 85 15 L 15 85" stroke="${strokeColor}" stroke-width="15" stroke-linecap="round" fill="none" />
+                </svg>`;
+            } else {
+                svgHtml = `
+                <svg viewBox="0 0 100 100" style="width:70%; height:70%; overflow:visible;">
+                    <circle class="draw-o-path" cx="50" cy="50" r="35" stroke="${strokeColor}" stroke-width="15" stroke-linecap="round" fill="none" />
+                </svg>`;
+            }
+            
+            cell.innerHTML = `<span class="player-symbol ${animClass}">${svgHtml}</span>`;
             
             playTone('move');
 
@@ -944,6 +1372,7 @@
             }
         }
 
+        // Instant Line Draw Animation Logic
         function drawLine(combo) {
             const line = document.getElementById('win-line');
             const c1 = document.querySelector(`.cell[data-i='${combo[0]}']`);
@@ -960,8 +1389,28 @@
 
             line.setAttribute('x1', x1); line.setAttribute('y1', y1);
             line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-            line.setAttribute('stroke', getComputedStyle(document.documentElement).getPropertyValue('--win-line-color'));
-            line.setAttribute('stroke-width', '10');
+
+            if (selectedLine === 'line-shimmer') {
+                line.setAttribute('stroke', 'url(#grad-shimmer)');
+                line.setAttribute('stroke-width', '15');
+            } else if (selectedLine === 'line-radial') {
+                const rad = document.getElementById('grad-radial');
+                rad.setAttribute('cx', (x1 + x2) / 2);
+                rad.setAttribute('cy', (y1 + y2) / 2);
+                line.setAttribute('stroke', 'url(#grad-radial)');
+                line.setAttribute('stroke-width', '18');
+            } else {
+                line.setAttribute('stroke', getComputedStyle(document.documentElement).getPropertyValue('--win-line-color'));
+                line.setAttribute('stroke-width', '10');
+            }
+
+            // Immediately calculate distance and animate path stroke
+            let length = Math.hypot(x2 - x1, y2 - y1);
+            line.style.strokeDasharray = length;
+            line.style.strokeDashoffset = length;
+            line.style.animation = "none";
+            line.offsetHeight; // trigger reflow
+            line.style.animation = "drawWinLine 0.3s forwards ease-out";
         }
 
         // --- CAPPED ALPHA-BETA MINIMAX AI LOGIC (Humans can win) ---
